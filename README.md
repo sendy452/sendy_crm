@@ -9,7 +9,7 @@ Before you begin, make sure you have the following installed:
 - **PHP**: Version 8.2 or higher
 - **Composer**: Dependency management tool
 - **Node.js**: Version 18.x or higher with npm or yarn
-- **MySQL**: Version 8.x or higher (or another compatible database)
+- **PostgreSQL**: Version 13.x or higher (or another compatible database)
 
 ### Server Requirements
 
@@ -23,6 +23,8 @@ Before you begin, make sure you have the following installed:
   - Ctype
   - JSON
   - BCMath
+  - pgsql
+  - pdo_pgsql
 
 ## Installation
 
