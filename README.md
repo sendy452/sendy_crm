@@ -29,9 +29,23 @@ Before you begin, make sure you have the following installed:
 ## Installation
 
 ### Step 1: Clone the Repository
-
-Clone the Laravel project from your repository.
-
 ```bash
 git clone https://github.com/sendy452/sendy_crm.git
-cd laravel-app
+```
+
+### Step 2: Install Dependencies
+```bash
+composer install
+```
+
+### Step 3: Set Up Environment Variables
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+### Step 4: Run Migrations and Seed Database
+```bash
+php artisan migrate
+php artisan db:seed
+```
