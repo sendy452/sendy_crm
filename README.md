@@ -8,7 +8,6 @@ Before you begin, make sure you have the following installed:
 
 - **PHP**: Version 8.2 or higher
 - **Composer**: Dependency management tool
-- **Node.js**: Version 18.x or higher with npm or yarn
 - **PostgreSQL**: Version 13.x or higher (or another compatible database)
 
 ### Server Requirements
@@ -49,3 +48,12 @@ php artisan key:generate
 php artisan migrate
 php artisan db:seed
 ```
+
+### DEMO
+[text](https://sendy-crm.my.id/)
+
+### USER AND ROLE
+email: admin@example.com as Super Admin
+email: manager@example.com as Manager
+email: user@example.com as User
+All user same using password: 12345678

@@ -106,7 +106,7 @@
                       <td>{{$data->approved_at ? date('d-m-Y H:i:s', strtotime($data->approved_at)):""}}</td>
                       <td>{{$data->is_approve ? "Approve":"Not Approve"}}</td>
                       <td>
-                        @if (!$data->is_approve) 
+                        @if (!$data->is_approve && auth()->user()->role_id < 3) 
                           <a href="{{url('approve-project').'/'.$data->id}}" class="btn {{'btn-success'}}" type="button"><i class="bi bi-check"></i></a>
                         @endif
                         <a href="{{url('delete-project').'/'.$data->id}}" class="btn {{'btn-danger'}}" type="button"><i class="bi bi-trash"></i></a>
