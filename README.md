@@ -50,10 +50,10 @@ php artisan db:seed
 ```
 
 ### DEMO
-[text](https://sendy-crm.my.id/)
+[Sendy-CRM](https://sendy-crm.my.id/)
 
 ### USER AND ROLE
-email: admin@example.com as Super Admin
-email: manager@example.com as Manager
-email: user@example.com as User
+email: admin@example.com as Super Admin <br />
+email: manager@example.com as Manager <br />
+email: user@example.com as User <br />
 All user same using password: 12345678
