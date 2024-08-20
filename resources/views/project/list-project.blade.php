@@ -24,6 +24,8 @@
         <h6 class="alert alert-success">{{ session('message') }}</h6>
     @endif
 
+    <h6 id="alert-ajax"></h6>
+
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
@@ -33,7 +35,7 @@
               <h5 class="card-title">Tambah Project</h5>
 
               <!-- General Form Elements -->
-              <form method="post" action="{{ route('add.project') }}">
+              <form id="project_form" method="POST">
                 @csrf
 
                 <div class="row mb-3">
@@ -59,7 +61,7 @@
 
                 <div class="row mb-3 text-end">
                   <div class="col-sm-12">
-                    <button type="submit" class="btn btn-primary">Tambah Project</button>
+                    <button type="submit" class="btn btn-primary" id="project_form_btn">Tambah Project</button>
                   </div>
                 </div>
 
@@ -131,4 +133,43 @@
       </section>
 
   </main>
+@endsection
 
+@section('script')
+<script>
+  $(document).ready(function() {    
+    $("#project_form_btn").click(function(e) {
+      e.preventDefault();
+      let form = $('#project_form')[0];
+      let data = new FormData(form);
+
+      $.ajax({
+        url: "{{ route('add.project') }}",
+        type: "POST",
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          let successMessage = response.message;
+          $('.alert').remove();
+          $('#alert-ajax').prepend('<div class="alert alert-success">' + successMessage + '</div>');
+
+          setTimeout(function() {
+            window.location.reload();
+          }, 500);
+        },
+        error: function(xhr) {
+          $('.alert').remove();
+          let errors = xhr.responseJSON.message;
+          let errorHtml = '<div class="alert alert-danger">';
+          $.each(errors, function(index, error) {
+              errorHtml += '- ' + error;
+          });
+          errorHtml += '</div>';
+          $('#alert-ajax').prepend(errorHtml);
+        }
+      });
+    });
+  });
+</script>
+@endsection

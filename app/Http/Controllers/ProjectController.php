@@ -48,7 +48,10 @@ class ProjectController extends Controller
         //Send failed response if request is not valid
         if ($validator->fails()) {
             $errors = $validator->errors();
-            return redirect()->back()->withErrors($errors);
+            return response()->json([
+                'error' => 'Validation Error',
+                'message' => $errors,
+            ], 422);
         }
 
         Transaction::create([
@@ -57,8 +60,8 @@ class ProjectController extends Controller
             'created_by' => auth()->user()->id,
         ]);
         
-        return redirect()->back()->with("message", "Data berhasil ditambahkan!");
-    }    
+        return response()->json(["message" => "Data berhasil ditambahkan!"]);
+    }
 
     public function deleteProject($idproject)
     {
