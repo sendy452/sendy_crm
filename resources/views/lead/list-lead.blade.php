@@ -22,6 +22,8 @@
       @endif
     @if (session('message'))
         <h6 class="alert alert-success">{{ session('message') }}</h6>
+    @elseif (session('danger'))
+      <h6 class="alert alert-danger">{{ session('danger') }}</h6>
     @endif
 
     <section class="section">
@@ -107,7 +109,15 @@
                       <td>{{$data->address}}</td>
                       <td>{{$data->phone}}</td>
                       <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
-                      <td><a href="{{url('delete-lead').'/'.$data->id}}" class="btn {{'btn-danger'}}" type="button"><i class="bi bi-trash"></i></a></td>
+                      <td>
+                        <a 
+                          href="{{url('delete-lead').'/'.$data->id}}" 
+                          class="btn {{'btn-danger'}}" 
+                          onclick="return confirm('Are you sure you want to delete this data?')" 
+                          type="button">
+                          <i class="bi bi-trash"></i>
+                        </a>
+                      </td>
                     </tr>
                     @endforeach
                   </tbody>

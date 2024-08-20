@@ -22,7 +22,7 @@ class CustomerController extends Controller
         ->leftJoin('customers', 'customers.id', 'transactions.customer_id')
         ->leftJoin('services', 'services.id', 'transactions.service_id')
         ->leftJoin('users', 'users.id', 'transactions.approved_by')
-        ->where('customers.is_lead', 0)
+        ->where('is_approve', 1)
         ->orderBy('customers.name','asc')
         ->get();
 

@@ -109,7 +109,13 @@
                         @if (!$data->is_approve && auth()->user()->role_id < 3) 
                           <a href="{{url('approve-project').'/'.$data->id}}" class="btn {{'btn-success'}}" type="button"><i class="bi bi-check"></i></a>
                         @endif
-                        <a href="{{url('delete-project').'/'.$data->id}}" class="btn {{'btn-danger'}}" type="button"><i class="bi bi-trash"></i></a>
+                        <a 
+                          href="{{url('delete-project').'/'.$data->id}}" 
+                          class="btn {{'btn-danger'}}" 
+                          onclick="return confirm('Are you sure you want to delete this data?')" 
+                          type="button">
+                          <i class="bi bi-trash"></i>
+                        </a>
                       </td>
                     </tr>
                     @endforeach
@@ -125,3 +131,4 @@
       </section>
 
   </main>
+

@@ -81,7 +81,7 @@
                     <div class="col-md-12">
                       <label for="inputName" class="form-label">Nama</label>
                       <input name="id" type="text" class="form-control" value="{{$data->id}}" hidden>
-                      <input name="name" type="text" class="form-control" value="{{$data->name}}">
+                      <input name="name" type="text" class="form-control" value="{{$data->name}}" required>
                     </div>
                     <div class="col-12">
                       <label for="inputHarga" class="form-label">Harga</label>

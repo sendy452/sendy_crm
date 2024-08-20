@@ -81,7 +81,7 @@
                     <div class="col-md-12">
                       <label for="inputName" class="form-label">Nama</label>
                       <input name="id" type="text" class="form-control" value="{{$data->id}}" hidden>
-                      <input name="name" type="text" class="form-control" value="{{$data->name}}">
+                      <input name="name" type="text" class="form-control" value="{{$data->name}}" required>
                     </div>
                     <div class="col-12">
                       <label for="inputEmail" class="form-label">Email</label>
@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-md-6">
                       <label for="inputAlamat" class="form-label">Alamat</label>                    
-                      <textarea name="address" class="form-control">{{$data->address}}</textarea>                      
+                      <textarea name="address" class="form-control" required>{{$data->address}}</textarea>                      
                     </div>
                     <div>
                       <button type="submit" class="btn btn-primary">Submit</button>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Service;
+use App\Models\Transaction;
 
 class ServiceController extends Controller
 {    
@@ -20,9 +21,12 @@ class ServiceController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'name' => 'string|unique:services,name',
+            'name' => 'required|unique:services,name',
+            'price' => 'required',
         ],[
-            'name.unique' => 'Service telah didaftarkan sebelumnya.',
+            'name.required' => 'Nama Service harap diisi!',
+            'name.unique' => 'Service telah didaftarkan sebelumnya',
+            'price.required' => 'Harga harap diisi!',
         ]);
 
         //Send failed response if request is not valid
@@ -41,9 +45,14 @@ class ServiceController extends Controller
 
     public function deleteService($idservice)
     {
-        Service::destroy($idservice);
+        $cek_service = Transaction::where('service_id', $idservice)->get();
 
-        return redirect()->back()->with("message", "Data berhasil dihapus!");
+        if (count($cek_service) > 0) {
+            return redirect()->back()->with("danger", "Data tidak dapat dihapus tercatat transaksi!");
+        } else {
+            Service::destroy($idservice);
+            return redirect()->back()->with("message", "Data berhasil dihapus!");
+        }
     }
 
     public function ubahService(Request $request)
@@ -62,9 +71,12 @@ class ServiceController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'name' => 'unique:services,name,'.$request->id.',id',
+            'name' => 'required|unique:services,name,'.$request->id.',id',
+            'price' => 'required',
         ],[
-            'name.unique' => 'Service telah didaftarkan sebelumnya.',
+            'name.required' => 'Nama Service harap diisi!',
+            'name.unique' => 'Service telah didaftarkan sebelumnya',
+            'price.required' => 'Harga harap diisi!',
         ]);
 
         //Send failed response if request is not valid

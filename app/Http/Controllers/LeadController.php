@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Customer;
+use App\Models\Transaction;
 
 class LeadController extends Controller
 {    
@@ -24,11 +25,18 @@ class LeadController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'email' => 'email|unique:customers,email',
-            'phone' => 'unique:customers,phone'
+            'name' => 'required',
+            'address' => 'required',
+            'email' => 'required|email|unique:customers,email',
+            'phone' => 'required|unique:customers,phone'
         ],[
-            'email.unique' => 'Email telah didaftarkan sebelumnya.',
-            'phone.unique' => 'No. Hp telah didaftarkan akun lain.',
+            'name.required' => 'Nama harap diisi!',
+            'address.required' => 'Alamat harap diisi!',
+            'email.required' => 'Email harap diisi!',
+            'email.email' => 'Format Email salah!',
+            'email.unique' => 'Email telah didaftarkan sebelumnya',
+            'phone.required' => 'No. Hp harap diisi!',
+            'phone.unique' => 'No. Hp telah didaftarkan akun lain',
         ]);
 
         //Send failed response if request is not valid
@@ -49,9 +57,14 @@ class LeadController extends Controller
 
     public function deleteLead($idlead)
     {
-        Customer::destroy($idlead);
+        $cek_customer = Transaction::where('customer_id', $idlead)->get();
 
-        return redirect()->back()->with("message", "Data berhasil dihapus!");
+        if (count($cek_customer) > 0) {
+            return redirect()->back()->with("danger", "Data tidak dapat dihapus tercatat transaksi!");
+        } else {
+            Customer::destroy($idlead);
+            return redirect()->back()->with("message", "Data berhasil dihapus!");
+        }
     }
 
     public function ubahLead(Request $request)
@@ -71,11 +84,18 @@ class LeadController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'email' => 'unique:customers,email,'.$request->id.',id',
-            'phone' => 'unique:customers,phone,'.$request->id.',id'
+            'name' => 'required',
+            'address' => 'required',
+            'email' => 'required|email|unique:customers,email,'.$request->id.',id',
+            'phone' => 'required|unique:customers,phone,'.$request->id.',id'
         ],[
-            'email.unique' => 'Email telah didaftarkan akun lain.',
-            'phone.unique' => 'No. Hp telah didaftarkan akun lain.',
+            'name.required' => 'Nama harap diisi!',
+            'address.required' => 'Alamat harap diisi!',
+            'email.required' => 'Email harap diisi!',
+            'email.email' => 'Format Email salah!',
+            'email.unique' => 'Email telah didaftarkan akun lain',
+            'phone.required' => 'No. Hp harap diisi!',
+            'phone.unique' => 'No. Hp telah didaftarkan akun lain',
         ]);
 
         //Send failed response if request is not valid

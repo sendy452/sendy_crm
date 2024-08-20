@@ -17,11 +17,13 @@
 
     @if($errors->any())
         @foreach ($errors->all() as $danger)
-              <h6 class="alert alert-danger">{{ $danger }}</h6>
+          <h6 class="alert alert-danger">{{ $danger }}</h6>
         @endforeach
       @endif
     @if (session('message'))
-        <h6 class="alert alert-success">{{ session('message') }}</h6>
+      <h6 class="alert alert-success">{{ session('message') }}</h6>
+    @elseif (session('danger'))
+      <h6 class="alert alert-danger">{{ session('danger') }}</h6>
     @endif
 
     <section class="section">
@@ -91,7 +93,15 @@
                       <td>{{$data->name}}</td>
                       <td>Rp.{{number_format($data->price)}}</td>
                       <td>{{date('d-m-Y', strtotime($data->created_at))}}</td>
-                      <td><a href="{{url('delete-service').'/'.$data->id}}" class="btn {{'btn-danger'}}" type="button"><i class="bi bi-trash"></i></a></td>
+                      <td>
+                        <a 
+                          href="{{url('delete-service').'/'.$data->id}}" 
+                          class="btn {{'btn-danger'}}" 
+                          onclick="return confirm('Are you sure you want to delete this data?')" 
+                          type="button">
+                          <i class="bi bi-trash"></i>
+                        </a>
+                      </td>
                     </tr>
                     @endforeach
                   </tbody>

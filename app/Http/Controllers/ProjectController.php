@@ -13,7 +13,6 @@ class ProjectController extends Controller
     public function index()
     {
         $customer = Customer::orderBy('name','asc')
-            ->where('is_lead', 1)
             ->get();
         $service = Service::orderBy('name','asc')
             ->get();
@@ -39,9 +38,11 @@ class ProjectController extends Controller
     {
         $data = $request->all();
         $validator = Validator::make($data, [
-            'customer_id' => 'string|unique:transactions,customer_id',
+            'customer_id' => 'required',
+            'service_id' => 'required',
         ],[
-            'customer_id.unique' => 'Lead telah didaftarkan sebelumnya.',
+            'customer_id.required' => 'Harap pilih Lead / Customer!',
+            'service_id.required' => 'Harap pilih Service!',
         ]);
 
         //Send failed response if request is not valid
@@ -62,12 +63,14 @@ class ProjectController extends Controller
     public function deleteProject($idproject)
     {
         $project = Transaction::find($idproject);
-
-        Customer::where('id', $project->customer_id)->update([
-            'is_lead' => 1,
-        ]);
-
         $project->delete();
+
+        $cek_customer = Transaction::where("customer_id", $project->customer_id)->where("is_approve", 1)->get();
+        if (count($cek_customer) <= 0) {
+            Customer::where('id', $project->customer_id)->update([
+                'is_lead' => 1,
+            ]);
+        }
 
         return redirect()->back()->with("message", "Data berhasil dihapus!");
     }
@@ -104,6 +107,7 @@ class ProjectController extends Controller
         ->leftJoin('customers', 'customers.id', 'transactions.customer_id')
         ->leftJoin('services', 'services.id', 'transactions.service_id')
         ->leftJoin('users', 'users.id', 'transactions.approved_by')
+        ->where('is_approve', 0)
         ->get();
 
         $bio = "";
@@ -133,6 +137,19 @@ class ProjectController extends Controller
 
     public function changeProject(Request $request)
     {   
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'service_id' => 'required',
+        ],[
+            'service_id.required' => 'Harap pilih Service!',
+        ]);
+
+        //Send failed response if request is not valid
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return redirect()->back()->withErrors($errors);
+        }
+
         $transaction = Transaction::find($request->id);
 
         $transaction->update([

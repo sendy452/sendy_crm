@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Role;
+use App\Models\User;
 
 class RoleController extends Controller
 {    
@@ -40,9 +41,14 @@ class RoleController extends Controller
 
     public function deleteRole($idrole)
     {
-        Role::destroy($idrole);
+        $cek_user = User::where('role_id', $idrole)->get();
 
-        return redirect()->back()->with("message", "Data berhasil deaktif!");
+        if (count($cek_user) > 0) {
+            return redirect()->back()->with("danger", "Data tidak dapat dihapus!");
+        } else {
+            Role::destroy($idrole);
+            return redirect()->back()->with("message", "Data berhasil deaktif!");
+        }
     }
 
     public function ubahRole(Request $request)
