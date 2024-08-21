@@ -39,7 +39,7 @@ class ProjectController extends Controller
         $data = $request->all();
         $validator = Validator::make($data, [
             'customer_id' => 'required',
-            'service_id' => 'required',
+            'service_id' => 'required|array|min:1',
         ],[
             'customer_id.required' => 'Harap pilih Lead / Customer!',
             'service_id.required' => 'Harap pilih Service!',
@@ -54,11 +54,13 @@ class ProjectController extends Controller
             ], 422);
         }
 
-        Transaction::create([
-            'customer_id' => $request->customer_id,
-            'service_id' => $request->service_id,
-            'created_by' => auth()->user()->id,
-        ]);
+        foreach ($request->service_id as $key => $value) {
+            Transaction::create([
+                'customer_id' => $request->customer_id,
+                'service_id' => $value,
+                'created_by' => auth()->user()->id,
+            ]);
+        }
         
         return response()->json(["message" => "Data berhasil ditambahkan!"]);
     }

@@ -51,11 +51,20 @@
                 <div class="row mb-3">
                   <label for="inputService" class="col-sm-2 col-form-label">Service</label>
                   <div class="col-sm-10">
-                  <select class="form-select" name="service_id" required>
-                      @foreach($service as $data)
-                      <option value="{{$data->id}}">{{$data->name}} - Rp.{{number_format($data->price)}}</option>
-                      @endforeach
-                  </select>     
+                    <select class="form-select mb-2" name="service_id[0]" required>
+                        @foreach($service as $data)
+                        <option value="{{$data->id}}">{{$data->name}} - Rp.{{number_format($data->price)}}</option>
+                        @endforeach
+                    </select>
+                    <div id="add_service"></div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-sm-2">
+                  </div>
+                  <div class="col-sm-10">
+                    <button type="button" class="btn btn-warning" id="add_serivce_btn">+</button>
+                    <button type="button" class="btn btn-danger" id="remove_serivce_btn">-</button>
                   </div>
                 </div>
 
@@ -84,7 +93,7 @@
   
                 <div class="table-responsive">
                   <!-- Default Table -->
-                <table class="table table-bordered dataTable">
+                <table class="table table-bordered dataTable" id="projectTable">
                   <thead>
                     <tr>
                       <th scope="col">No</th>
@@ -154,22 +163,57 @@
           $('.alert').remove();
           $('#alert-ajax').prepend('<div class="alert alert-success">' + successMessage + '</div>');
 
-          setTimeout(function() {
-            window.location.reload();
-          }, 500);
+          $( "#projectTable" ).load( window.location.href + " #projectTable" );
         },
         error: function(xhr) {
           $('.alert').remove();
           let errors = xhr.responseJSON.message;
           let errorHtml = '<div class="alert alert-danger">';
           $.each(errors, function(index, error) {
-              errorHtml += '- ' + error;
+              errorHtml += '- ' + error + '</br>';
           });
           errorHtml += '</div>';
           $('#alert-ajax').prepend(errorHtml);
         }
       });
     });
+
+    var counter = 0;
+    var add_serivce_btn = document.getElementById('add_serivce_btn');
+    var add_service = document.getElementById('add_service');
+    
+    var addInput = function() {
+      counter++;
+      
+      var select = document.createElement("select");
+      select.id = 'select-' + counter;
+      select.name = 'service_id[' + counter + ']';
+      select.className = 'form-select mb-2';
+      select.required = true;
+
+      var services = {!! json_encode($service) !!};
+
+      services.forEach(function(service) {
+        var option = document.createElement("option");
+        option.value = service.id;
+        option.text = service.name + ' - Rp.' + service.price.toLocaleString();
+        select.appendChild(option);
+      });
+
+      add_service.appendChild(select);
+    };
+    add_serivce_btn.addEventListener('click', function() {
+      addInput();
+    }.bind(this));
+
+    var remove_serivce_btn = document.getElementById('remove_serivce_btn');
+    remove_serivce_btn.addEventListener('click', function() {
+      var removeElement = document.getElementById('select-' + counter);
+      removeElement.parentNode.removeChild(removeElement);
+
+      counter--;
+    }.bind(this));
+
   });
 </script>
 @endsection
